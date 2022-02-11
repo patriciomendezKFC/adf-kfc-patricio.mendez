@@ -2,6 +2,23 @@
 	"name": "PL_EJEMPLO_CLASE01",
 	"properties": {
 		"description": "Pipeline de ejemplo en curso de ADF KFC",
+		"activities": [
+			{
+				"name": "Configurar saludo",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Saludo",
+					"value": "Hols ADF"
+				}
+			}
+		],
+		"variables": {
+			"Saludo": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	}
 }
