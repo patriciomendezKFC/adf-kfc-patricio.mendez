@@ -19,6 +19,9 @@
 				"type": "String"
 			}
 		},
+		"folder": {
+			"name": "CLASE01"
+		},
 		"annotations": []
 	}
 }
