@@ -1,0 +1,26 @@
+{
+	"name": "CSV_EjemploClase02Nube",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Is_kfc_datalake",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "CLASE02"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "EjemploClase02Nube.csv",
+				"fileSystem": "aci-patricio-mendez"
+			},
+			"columnDelimiter": ";",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
