@@ -1,0 +1,24 @@
+{
+	"name": "PARQUET_EjempoClase02",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Is_kfc_datalake",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "CLASE02"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Ejemplic_Clase02.parquet",
+				"folderPath": "CLASE02",
+				"fileSystem": "aci-patricio-mendez"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
