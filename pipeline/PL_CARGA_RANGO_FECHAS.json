@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "año_mes",
+				"name": "anio_mes",
 				"type": "Lookup",
 				"dependsOn": [],
 				"policy": {
@@ -33,7 +33,7 @@
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "año_mes",
+						"activity": "anio_mes",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -42,7 +42,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@array(activity('año_mes').output.value)",
+						"value": "@array(activity('anio_mes').output.value)",
 						"type": "Expression"
 					},
 					"isSequential": true,
