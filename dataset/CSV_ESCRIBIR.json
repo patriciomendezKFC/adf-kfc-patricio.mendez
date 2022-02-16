@@ -15,7 +15,7 @@
 				"type": "AzureBlobFSLocation",
 				"fileSystem": "aci-patricio-mendez"
 			},
-			"columnDelimiter": ",",
+			"columnDelimiter": ";",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
