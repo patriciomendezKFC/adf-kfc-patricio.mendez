@@ -1,0 +1,11 @@
+{
+	"name": "ls_keyvault_kfc",
+	"properties": {
+		"description": "Conexión hacia baúl de claves",
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://kv-grupokfc-adf.vault.azure.net/"
+		}
+	}
+}
