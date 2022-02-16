@@ -21,6 +21,14 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().archivo",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().directorio",
+					"type": "Expression"
+				},
 				"fileSystem": "aci-patricio-mendez"
 			},
 			"columnDelimiter": ";",
