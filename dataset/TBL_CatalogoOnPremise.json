@@ -1,0 +1,18 @@
+{
+	"name": "TBL_CatalogoOnPremise",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_local_mysql",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "CLASE03"
+		},
+		"annotations": [],
+		"type": "MySqlTable",
+		"schema": [],
+		"typeProperties": {
+			"tableName": "`registro_trabajo`"
+		}
+	}
+}
