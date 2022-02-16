@@ -1,0 +1,17 @@
+{
+	"name": "ls_local_mysql",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"description": "Conexión local a MySQL",
+		"annotations": [],
+		"type": "MySql",
+		"typeProperties": {
+			"connectionString": "server=127.0.0.1;port=3306;database=db_patricio_mendez_kfc;user=root;sslmode=1;usesystemtruststore=0",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJkNzE1M2UzMS02M2ZmLTRiZmQtYThmYS1hZjU3M2Q1NTRmOGIiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "ir-conexion-local",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
