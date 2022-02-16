@@ -1,0 +1,25 @@
+{
+	"name": "CSV_ESCRIBIR",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Is_kfc_datalake",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "CLASE03"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "aci-patricio-mendez"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
