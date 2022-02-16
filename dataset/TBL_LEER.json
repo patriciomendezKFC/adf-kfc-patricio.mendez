@@ -1,0 +1,15 @@
+{
+	"name": "TBL_LEER",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_azuresqldatabase",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "CLASE03"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	}
+}
