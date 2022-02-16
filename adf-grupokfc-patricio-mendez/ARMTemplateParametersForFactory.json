@@ -1,0 +1,24 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf-grupokfc-patricio-mendez"
+		},
+		"Is_fileSystemLocal_password": {
+			"value": ""
+		},
+		"Is_kfc_datalake_accountKey": {
+			"value": ""
+		},
+		"Is_fileSystemLocal_properties_typeProperties_host": {
+			"value": "C:\\Patricio Méndez\\CursoDataFactory"
+		},
+		"Is_fileSystemLocal_properties_typeProperties_userId": {
+			"value": "KFC\\patricio.mendez"
+		},
+		"Is_kfc_datalake_properties_typeProperties_url": {
+			"value": "https://dlsgrupokfcadf.dfs.core.windows.net"
+		}
+	}
+}

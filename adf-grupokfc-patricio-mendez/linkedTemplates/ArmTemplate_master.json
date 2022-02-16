@@ -1,0 +1,77 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Nombre de instancia de Data Factory",
+			"defaultValue": "adf-grupokfc-patricio-mendez"
+		},
+		"Is_fileSystemLocal_password": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"password\"de \"Is_fileSystemLocal\""
+		},
+		"Is_kfc_datalake_accountKey": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"accountKey\"de \"Is_kfc_datalake\""
+		},
+		"Is_fileSystemLocal_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "C:\\Patricio Méndez\\CursoDataFactory"
+		},
+		"Is_fileSystemLocal_properties_typeProperties_userId": {
+			"type": "string",
+			"defaultValue": "KFC\\patricio.mendez"
+		},
+		"Is_kfc_datalake_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://dlsgrupokfcadf.dfs.core.windows.net"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI de la cuenta de almacenamiento que contiene las plantillas de ARM vinculadas."
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Token de SAS para la cuenta de almacenamiento que contiene las plantillas de ARM vinculadas"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "adf-grupokfc-patricio-mendez_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"Is_kfc_datalake_accountKey": {
+						"value": "[parameters('Is_kfc_datalake_accountKey')]"
+					},
+					"Is_fileSystemLocal_password": {
+						"value": "[parameters('Is_fileSystemLocal_password')]"
+					},
+					"Is_kfc_datalake_properties_typeProperties_url": {
+						"value": "[parameters('Is_kfc_datalake_properties_typeProperties_url')]"
+					},
+					"Is_fileSystemLocal_properties_typeProperties_host": {
+						"value": "[parameters('Is_fileSystemLocal_properties_typeProperties_host')]"
+					},
+					"Is_fileSystemLocal_properties_typeProperties_userId": {
+						"value": "[parameters('Is_fileSystemLocal_properties_typeProperties_userId')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
