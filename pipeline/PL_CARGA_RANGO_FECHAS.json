@@ -1,0 +1,82 @@
+{
+	"name": "PL_CARGA_RANGO_FECHAS",
+	"properties": {
+		"activities": [
+			{
+				"name": "año_mes",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "DECLARE @MinDate DATE = '2017-01-01',\n\t\t@MaxDate DATE = '2017-07-01';\n\nSELECT CONVERT(varchar,fechaCorte,23) AS fechaCorte, MONTH(fechaCorte) as mesCorte, YEAR(fechaCorte) as anioCorte\nFROM\n(\n\tSELECT \n\tTOP(DATEDIFF(MONTH, @MinDate,@MaxDate)+1)\n\tfechaCorte= EOMONTH(DATEADD(MONTH,ROW_NUMBER() OVER (ORDER BY a.object_id)-1,@MinDate))\n\tFROM sys.all_objects a\n\tCROSS JOIN sys.all_objects b\n)fechas\n\nORDER BY fechaCorte;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "TBL_LEER",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "iteracion meses",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "año_mes",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@array(activity('año_mes').output.value)",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "PL_CARGA_INCREMENTAL",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "PL_CARGA_INCREMENTAL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"año": {
+										"value": "@item().anioCorte",
+										"type": "Expression"
+									},
+									"mes": {
+										"value": "@item().mesCorte",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					]
+				}
+			}
+		],
+		"folder": {
+			"name": "CLASE03"
+		},
+		"annotations": []
+	}
+}
