@@ -17,7 +17,10 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "SELECT [idFactura]\n      ,[idCliente]\n      ,[idEmpleado]\n      ,[fechaFactura]\n      ,[subtotal]\n      ,[impuestos]\n  FROM [dbo].[Factura]\n  WHERE YEAR([fechaFactura])=2017\n  AND MONTH([fechaFactura])=1",
+						"sqlReaderQuery": {
+							"value": "@concat('SELECT [idFactura],[idCliente],[idEmpleado],[fechaFactura],[subtotal],[impuestos] FROM [dbo].[Factura] WHERE YEAR([fechaFactura])='\n,pipeline().parameters.año,' AND MONTH([fechaFactura])=',pipeline().parameters.mes)",
+							"type": "Expression"
+						},
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
