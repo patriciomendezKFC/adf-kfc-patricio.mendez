@@ -17,7 +17,10 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "DECLARE @MinDate DATE = '2017-01-01',\n\t\t@MaxDate DATE = '2017-07-01';\n\nSELECT CONVERT(varchar,fechaCorte,23) AS fechaCorte, MONTH(fechaCorte) as mesCorte, YEAR(fechaCorte) as anioCorte\nFROM\n(\n\tSELECT \n\tTOP(DATEDIFF(MONTH, @MinDate,@MaxDate)+1)\n\tfechaCorte= EOMONTH(DATEADD(MONTH,ROW_NUMBER() OVER (ORDER BY a.object_id)-1,@MinDate))\n\tFROM sys.all_objects a\n\tCROSS JOIN sys.all_objects b\n)fechas\n\nORDER BY fechaCorte;",
+						"sqlReaderQuery": {
+							"value": "SELECT CONVERT(varchar,fechaCorte,23) AS fechaCorte, MONTH(fechaCorte) as mesCorte, YEAR(fechaCorte) as anioCorte\nFROM\n(\n\tSELECT \n\tTOP(DATEDIFF(MONTH, CONVERT(DATE,'@{pipeline().parameters.MinDate}'),CONVERT(DATE,'@{pipeline().parameters.MaxDate}'))+1)\n\tfechaCorte= EOMONTH(DATEADD(MONTH,ROW_NUMBER() OVER (ORDER BY a.object_id)-1,CONVERT(DATE,'@{pipeline().parameters.MinDate}')))\n\tFROM sys.all_objects a\n\tCROSS JOIN sys.all_objects b\n)fechas\n\nORDER BY fechaCorte;",
+							"type": "Expression"
+						},
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -74,6 +77,14 @@
 				}
 			}
 		],
+		"parameters": {
+			"MinDate": {
+				"type": "string"
+			},
+			"MaxDate": {
+				"type": "string"
+			}
+		},
 		"folder": {
 			"name": "CLASE03"
 		},
