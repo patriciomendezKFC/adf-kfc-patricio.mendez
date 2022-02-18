@@ -39,6 +39,14 @@
 			"type": "string",
 			"defaultValue": "https://kv-grupokfc-adf.vault.azure.net/"
 		},
+		"SC_CalendarizadoCargaInicial_properties_PL_CARGA_RANGO_FECHAS_parameters_MinDate": {
+			"type": "string",
+			"defaultValue": "20190101"
+		},
+		"SC_CalendarizadoCargaInicial_properties_PL_CARGA_RANGO_FECHAS_parameters_MaxDate": {
+			"type": "string",
+			"defaultValue": "20191231"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI de la cuenta de almacenamiento que contiene las plantillas de ARM vinculadas."
@@ -107,6 +115,12 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"SC_CalendarizadoCargaInicial_properties_PL_CARGA_RANGO_FECHAS_parameters_MinDate": {
+						"value": "[parameters('SC_CalendarizadoCargaInicial_properties_PL_CARGA_RANGO_FECHAS_parameters_MinDate')]"
+					},
+					"SC_CalendarizadoCargaInicial_properties_PL_CARGA_RANGO_FECHAS_parameters_MaxDate": {
+						"value": "[parameters('SC_CalendarizadoCargaInicial_properties_PL_CARGA_RANGO_FECHAS_parameters_MaxDate')]"
 					}
 				}
 			},

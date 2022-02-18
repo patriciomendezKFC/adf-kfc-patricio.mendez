@@ -6,6 +6,14 @@
 			"type": "string",
 			"metadata": "Nombre de instancia de Data Factory",
 			"defaultValue": "adf-grupokfc-patricio-mendez"
+		},
+		"SC_CalendarizadoCargaInicial_properties_PL_CARGA_RANGO_FECHAS_parameters_MinDate": {
+			"type": "string",
+			"defaultValue": "20190101"
+		},
+		"SC_CalendarizadoCargaInicial_properties_PL_CARGA_RANGO_FECHAS_parameters_MaxDate": {
+			"type": "string",
+			"defaultValue": "20191231"
 		}
 	},
 	"variables": {
@@ -112,6 +120,51 @@
 				"annotations": []
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SC_CalendarizadoCargaInicial')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Calendarizacion Ejecucion Carga Inicial",
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "PL_CARGA_RANGO_FECHAS",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"MinDate": "[parameters('SC_CalendarizadoCargaInicial_properties_PL_CARGA_RANGO_FECHAS_parameters_MinDate')]",
+							"MaxDate": "[parameters('SC_CalendarizadoCargaInicial_properties_PL_CARGA_RANGO_FECHAS_parameters_MaxDate')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Month",
+						"interval": 1,
+						"startTime": "2022-02-18T16:20:00",
+						"timeZone": "SA Pacific Standard Time",
+						"schedule": {
+							"minutes": [
+								35
+							],
+							"hours": [
+								16
+							],
+							"monthDays": [
+								18
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/PL_CARGA_RANGO_FECHAS')]"
+			]
 		}
 	]
 }

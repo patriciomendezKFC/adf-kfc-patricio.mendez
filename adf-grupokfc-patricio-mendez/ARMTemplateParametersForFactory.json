@@ -28,6 +28,12 @@
 		},
 		"ls_keyvault_kfc_properties_typeProperties_baseUrl": {
 			"value": "https://kv-grupokfc-adf.vault.azure.net/"
+		},
+		"SC_CalendarizadoCargaInicial_properties_PL_CARGA_RANGO_FECHAS_parameters_MinDate": {
+			"value": "20190101"
+		},
+		"SC_CalendarizadoCargaInicial_properties_PL_CARGA_RANGO_FECHAS_parameters_MaxDate": {
+			"value": "20191231"
 		}
 	}
 }
