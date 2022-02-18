@@ -15,6 +15,10 @@
 			"type": "secureString",
 			"metadata": "Cadena protegida para \"accountKey\"de \"Is_kfc_datalake\""
 		},
+		"ls_local_mysql_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"ls_local_mysql\""
+		},
 		"Is_fileSystemLocal_properties_typeProperties_host": {
 			"type": "string",
 			"defaultValue": "C:\\Patricio Méndez\\CursoDataFactory"
@@ -26,6 +30,14 @@
 		"Is_kfc_datalake_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://dlsgrupokfcadf.dfs.core.windows.net"
+		},
+		"ls_azuresqldatabase_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "connection-string"
+		},
+		"ls_keyvault_kfc_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://kv-grupokfc-adf.vault.azure.net/"
 		},
 		"containerUri": {
 			"type": "string",
@@ -60,18 +72,47 @@
 					"Is_fileSystemLocal_password": {
 						"value": "[parameters('Is_fileSystemLocal_password')]"
 					},
+					"ls_local_mysql_connectionString": {
+						"value": "[parameters('ls_local_mysql_connectionString')]"
+					},
 					"Is_kfc_datalake_properties_typeProperties_url": {
 						"value": "[parameters('Is_kfc_datalake_properties_typeProperties_url')]"
+					},
+					"ls_keyvault_kfc_properties_typeProperties_baseUrl": {
+						"value": "[parameters('ls_keyvault_kfc_properties_typeProperties_baseUrl')]"
 					},
 					"Is_fileSystemLocal_properties_typeProperties_host": {
 						"value": "[parameters('Is_fileSystemLocal_properties_typeProperties_host')]"
 					},
 					"Is_fileSystemLocal_properties_typeProperties_userId": {
 						"value": "[parameters('Is_fileSystemLocal_properties_typeProperties_userId')]"
+					},
+					"ls_azuresqldatabase_properties_typeProperties_connectionString_secretName": {
+						"value": "[parameters('ls_azuresqldatabase_properties_typeProperties_connectionString_secretName')]"
 					}
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "adf-grupokfc-patricio-mendez_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'adf-grupokfc-patricio-mendez_ArmTemplate_0')]"
+			]
 		}
 	]
 }

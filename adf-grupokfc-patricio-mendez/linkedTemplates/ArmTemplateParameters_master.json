@@ -11,6 +11,9 @@
 		"Is_kfc_datalake_accountKey": {
 			"value": ""
 		},
+		"ls_local_mysql_connectionString": {
+			"value": ""
+		},
 		"Is_fileSystemLocal_properties_typeProperties_host": {
 			"value": "C:\\Patricio Méndez\\CursoDataFactory"
 		},
@@ -19,6 +22,12 @@
 		},
 		"Is_kfc_datalake_properties_typeProperties_url": {
 			"value": "https://dlsgrupokfcadf.dfs.core.windows.net"
+		},
+		"ls_azuresqldatabase_properties_typeProperties_connectionString_secretName": {
+			"value": "connection-string"
+		},
+		"ls_keyvault_kfc_properties_typeProperties_baseUrl": {
+			"value": "https://kv-grupokfc-adf.vault.azure.net/"
 		},
 		"containerUri": {
 			"value": ""
