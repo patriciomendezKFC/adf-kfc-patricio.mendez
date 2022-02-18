@@ -1,0 +1,100 @@
+{
+	"name": "PL_EJEMPLI_FLUJOS",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "bandera",
+					"value": {
+						"value": "@add(1,6)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "ejecucion correcta",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "resultado",
+					"value": "ok"
+				}
+			},
+			{
+				"name": "ejecucion fallida",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "resultado",
+					"value": "error"
+				}
+			},
+			{
+				"name": "Set variable2",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "ejecucion fallida",
+						"dependencyConditions": [
+							"Skipped"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "resultado",
+					"value": "res 2"
+				}
+			},
+			{
+				"name": "Set variable3",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set variable2",
+						"dependencyConditions": [
+							"Skipped"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "resultado",
+					"value": "res 3"
+				}
+			}
+		],
+		"variables": {
+			"bandera": {
+				"type": "String"
+			},
+			"resultado": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "CLASE04"
+		},
+		"annotations": []
+	}
+}
