@@ -1,0 +1,40 @@
+{
+	"name": "SC_CalendarizadoCargaInicial",
+	"properties": {
+		"description": "Calendarizacion Ejecucion Carga Inicial",
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "PL_CARGA_RANGO_FECHAS",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"MinDate": "20190101",
+					"MaxDate": "20191231"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Month",
+				"interval": 1,
+				"startTime": "2022-02-18T16:20:00",
+				"timeZone": "SA Pacific Standard Time",
+				"schedule": {
+					"minutes": [
+						35
+					],
+					"hours": [
+						16
+					],
+					"monthDays": [
+						18
+					]
+				}
+			}
+		}
+	}
+}
