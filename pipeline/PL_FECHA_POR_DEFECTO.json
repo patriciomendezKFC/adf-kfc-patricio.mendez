@@ -3,12 +3,24 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Set variable1",
+				"name": "Set fecha corteVAR",
 				"type": "SetVariable",
 				"dependsOn": [],
-				"userProperties": []
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "fechaCorte",
+					"value": {
+						"value": "@coalesce(pipeline().parameters.fechaCorte,utcnow())",
+						"type": "Expression"
+					}
+				}
 			}
 		],
+		"parameters": {
+			"fechaCorte": {
+				"type": "string"
+			}
+		},
 		"folder": {
 			"name": "CLASES ASINCRONICAS"
 		},
