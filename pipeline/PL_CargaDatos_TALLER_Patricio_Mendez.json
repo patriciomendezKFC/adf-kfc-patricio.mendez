@@ -61,7 +61,7 @@
 								"type": "Expression"
 							},
 							"archivo": {
-								"value": "@concat(pipeline().parameters.tabla,'.csv')",
+								"value": "@{pipeline().parameters.nombreArchivo}",
 								"type": "Expression"
 							}
 						}
@@ -77,6 +77,9 @@
 				"type": "string"
 			},
 			"query": {
+				"type": "string"
+			},
+			"nombreArchivo": {
 				"type": "string"
 			}
 		},
