@@ -21,6 +21,519 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/CSV_ResultadoWebService')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Is_kfc_datalake",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "CLASES ASINCRONICAS"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "ConsultaREST.csv",
+						"folderPath": "RESULTADOS",
+						"fileSystem": "aci-instructor"
+					},
+					"columnDelimiter": "|",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/REST_Dataset')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "RestService1",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "CLASES ASINCRONICAS"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TBL_CatalgoCopiaNube')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_azuresqldatabase",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "CLASE03"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "PatricioMendezCatalgo"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TBL_CatalogoOnPremise')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_local_mysql",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "CLASE03"
+				},
+				"annotations": [],
+				"type": "MySqlTable",
+				"schema": [],
+				"typeProperties": {
+					"tableName": "`registro_trabajo`"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TBL_LEER')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_azuresqldatabase",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "CLASE03"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/XLSX_EjemploClase02')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Is_fileSystemLocal",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "CLASE02"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Hoja1",
+					"location": {
+						"type": "FileServerLocation",
+						"fileName": "EjemploClase2.xlsx"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "id",
+						"type": "String"
+					},
+					{
+						"name": "Nombre",
+						"type": "String"
+					},
+					{
+						"name": "Edad",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_EJECUTAR_SP1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Stored procedure1",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[Saludar]",
+							"storedProcedureParameters": {
+								"nombre": {
+									"value": "Patricio",
+									"type": "String"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_azuresqldatabase",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "CLASES ASINCRONICAS"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_CONSUMO_REST_DATASET')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"paginationRules": {
+									"supportRFC5988": "true"
+								}
+							},
+							"sink": {
+								"type": "JsonSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "JsonWriteSettings"
+								}
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "REST_Dataset",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "JSON_WebService",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "CLASES ASINCRONICAS"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-02-18T21:18:01Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/REST_Dataset')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_CONSUMO_REST_DATASET_CSV')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"paginationRules": {
+									"supportRFC5988": "true"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "$['$id']"
+										},
+										"sink": {
+											"name": "id",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"path": "$['currentDateTime']"
+										},
+										"sink": {
+											"name": "currentDateTime",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['utcOffset']"
+										},
+										"sink": {
+											"name": "utcOffset",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['isDayLightSavingsTime']"
+										},
+										"sink": {
+											"name": "isDayLightSavingsTime",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"path": "$['dayOfTheWeek']"
+										},
+										"sink": {
+											"name": "dayOfTheWeek",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['timeZoneName']"
+										},
+										"sink": {
+											"name": "timeZoneName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['currentFileTime']"
+										},
+										"sink": {
+											"name": "currentFileTime",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"path": "$['ordinalDate']"
+										},
+										"sink": {
+											"name": "ordinalDate",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['serviceResponse']"
+										},
+										"sink": {
+											"name": "serviceResponse",
+											"type": "String"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "REST_Dataset",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "CSV_ResultadoWebService",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "CLASES ASINCRONICAS"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-02-18T21:18:01Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/REST_Dataset')]",
+				"[concat(variables('factoryId'), '/datasets/CSV_ResultadoWebService')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_CARGA_INCREMENTAL')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": {
+									"value": "SELECT \n    [idFactura],\n    [idCliente],\n    [idEmpleado],\n    [fechaFactura],\n    [subtotal],\n    [impuestos] \nFROM [dbo].[Factura] \nWHERE YEAR([fechaFactura])=@{pipeline().parameters.año}\nAND MONTH([fechaFactura])=@{pipeline().parameters.mes}",
+									"type": "Expression"
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "TBL_LEER",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "CSV_ESCRIBIR",
+								"type": "DatasetReference",
+								"parameters": {
+									"directorio": {
+										"value": "@concat('FACTURA/',pipeline().parameters.año,'/',pipeline().parameters.mes)",
+										"type": "Expression"
+									},
+									"archivo": "Factura.csv"
+								}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"año": {
+						"type": "string"
+					},
+					"mes": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "CLASE03"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/TBL_LEER')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/PL_CARGA_INCREMENTAL_1')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -130,7 +643,9 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/TBL_LEER')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/PL_COPIA_DATOS_A_NUBE')]",
@@ -196,7 +711,10 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/TBL_CatalogoOnPremise')]",
+				"[concat(variables('factoryId'), '/datasets/TBL_CatalgoCopiaNube')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/PL_COPIA_DATOS_A_NUBE_CON_MAPEO')]",
@@ -263,7 +781,10 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/TBL_CatalogoOnPremise')]",
+				"[concat(variables('factoryId'), '/datasets/TBL_CatalgoCopiaNube')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/PL_COPIA_EXCEL_LOCAL_A_NUBE')]",
@@ -338,7 +859,9 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/XLSX_EjemploClase02')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/PL_COPIA_EXCEL_LOCAL_A_PARQUET')]",
@@ -411,7 +934,9 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/XLSX_EjemploClase02')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/PL_EJECUTAR_SP2')]",
@@ -493,7 +1018,110 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/TBL_LEER')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_CargaDatos_TALLER_Patricio_Mendez')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": {
+									"value": "@{pipeline().parameters.query}",
+									"type": "Expression"
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "TBL_LEER",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "CSV_ESCRIBIR",
+								"type": "DatasetReference",
+								"parameters": {
+									"directorio": {
+										"value": "@concat('Taller/',pipeline().parameters.esquema,'/',pipeline().parameters.tabla,'/')",
+										"type": "Expression"
+									},
+									"archivo": {
+										"value": "@{pipeline().parameters.nombreArchivo}",
+										"type": "Expression"
+									}
+								}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"esquema": {
+						"type": "string"
+					},
+					"tabla": {
+						"type": "string"
+					},
+					"query": {
+						"type": "string"
+					},
+					"nombreArchivo": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "EVALUACION"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/TBL_LEER')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/PL_CARGA_RANGO_FECHAS')]",
@@ -594,7 +1222,234 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/TBL_LEER')]",
+				"[concat(variables('factoryId'), '/pipelines/PL_CARGA_INCREMENTAL')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_TALLER_Patricio_Mendez')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Consulta",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": {
+									"value": "SELECT\nidIngesta,\nEsquema,\nTabla,\nconsulta AS queryOrg,\nTipoTabla\nFROM par.CatIngesta\n",
+									"type": "Expression"
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "TBL_LEER",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "Loop",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Consulta",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@array(activity('Consulta').output.value)",
+								"type": "Expression"
+							},
+							"isSequential": false,
+							"activities": [
+								{
+									"name": "Set query",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "query",
+										"value": {
+											"value": "@{replace(item().queryOrg,'{{fechaCorte}}',pipeline().parameters.fechaCorte)}",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "If Condition1",
+									"type": "IfCondition",
+									"dependsOn": [
+										{
+											"activity": "Set query",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"expression": {
+											"value": "@equals(item().TipoTabla,'stock')",
+											"type": "Expression"
+										},
+										"ifFalseActivities": [
+											{
+												"name": "Set nombreArchivo",
+												"type": "SetVariable",
+												"dependsOn": [],
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "nombreArchivo",
+													"value": {
+														"value": "@concat(item().tabla,'_',pipeline().parameters.fechaCorte,'.csv')",
+														"type": "Expression"
+													}
+												}
+											},
+											{
+												"name": "Execute Carga_History",
+												"type": "ExecutePipeline",
+												"dependsOn": [
+													{
+														"activity": "Set nombreArchivo",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"userProperties": [],
+												"typeProperties": {
+													"pipeline": {
+														"referenceName": "PL_CargaDatos_TALLER_Patricio_Mendez",
+														"type": "PipelineReference"
+													},
+													"waitOnCompletion": true,
+													"parameters": {
+														"esquema": {
+															"value": "@item().esquema",
+															"type": "Expression"
+														},
+														"tabla": {
+															"value": "@item().tabla",
+															"type": "Expression"
+														},
+														"query": {
+															"value": "@{variables('query')}",
+															"type": "Expression"
+														},
+														"nombreArchivo": {
+															"value": "@variables('nombreArchivo')",
+															"type": "Expression"
+														}
+													}
+												}
+											}
+										],
+										"ifTrueActivities": [
+											{
+												"name": "Set nombreArchivo1",
+												"type": "SetVariable",
+												"dependsOn": [],
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "nombreArchivo",
+													"value": {
+														"value": "@concat(item().tabla,'.csv')",
+														"type": "Expression"
+													}
+												}
+											},
+											{
+												"name": "Execute Carga Stock",
+												"type": "ExecutePipeline",
+												"dependsOn": [
+													{
+														"activity": "Set nombreArchivo1",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"userProperties": [],
+												"typeProperties": {
+													"pipeline": {
+														"referenceName": "PL_CargaDatos_TALLER_Patricio_Mendez",
+														"type": "PipelineReference"
+													},
+													"waitOnCompletion": true,
+													"parameters": {
+														"esquema": {
+															"value": "@item().esquema",
+															"type": "Expression"
+														},
+														"tabla": {
+															"value": "@item().tabla",
+															"type": "Expression"
+														},
+														"query": {
+															"value": "@{variables('query')}",
+															"type": "Expression"
+														},
+														"nombreArchivo": {
+															"value": "@variables('nombreArchivo')",
+															"type": "Expression"
+														}
+													}
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"fechaCorte": {
+						"type": "string"
+					}
+				},
+				"variables": {
+					"query": {
+						"type": "String"
+					},
+					"nombreArchivo": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "EVALUACION"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/TBL_LEER')]",
+				"[concat(variables('factoryId'), '/pipelines/PL_CargaDatos_TALLER_Patricio_Mendez')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/SC_CalendarizadoCargaInicial')]",

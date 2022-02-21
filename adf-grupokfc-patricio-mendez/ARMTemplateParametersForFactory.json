@@ -34,6 +34,9 @@
 		},
 		"SC_CalendarizadoCargaInicial_properties_PL_CARGA_RANGO_FECHAS_parameters_MaxDate": {
 			"value": "20191231"
+		},
+		"RestService1_properties_typeProperties_url": {
+			"value": "http://worldclockapi.com/api/json/utc/now"
 		}
 	}
 }
