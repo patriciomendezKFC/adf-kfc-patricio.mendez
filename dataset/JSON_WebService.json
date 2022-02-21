@@ -1,0 +1,22 @@
+{
+	"name": "JSON_WebService",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Is_kfc_datalake",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "CLASES ASINCRONICAS"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "ConsultaREST.json",
+				"folderPath": "RESULTADOS"
+			}
+		},
+		"schema": {}
+	}
+}
