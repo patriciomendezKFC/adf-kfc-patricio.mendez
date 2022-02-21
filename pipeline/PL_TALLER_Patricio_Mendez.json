@@ -18,7 +18,7 @@
 					"source": {
 						"type": "AzureSqlSource",
 						"sqlReaderQuery": {
-							"value": "SELECT\nidIngesta,\nEsquema,\nTabla,\nconsulta AS query\nFROM par.CatIngesta\n",
+							"value": "SELECT\nidIngesta,\nEsquema,\nTabla,\nconsulta AS queryOrg\nFROM par.CatIngesta\n",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
@@ -58,7 +58,7 @@
 							"typeProperties": {
 								"variableName": "query",
 								"value": {
-									"value": "@{item().query}",
+									"value": "@{item().queryOrg}",
 									"type": "Expression"
 								}
 							}
