@@ -1,6 +1,10 @@
 {
 	"name": "REST_Dataset",
 	"properties": {
+		"linkedServiceName": {
+			"referenceName": "RestService1",
+			"type": "LinkedServiceReference"
+		},
 		"folder": {
 			"name": "CLASES ASINCRONICAS"
 		},
