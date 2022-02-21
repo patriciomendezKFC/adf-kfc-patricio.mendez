@@ -64,44 +64,6 @@
 							}
 						},
 						{
-							"name": "Execute Carga",
-							"type": "ExecutePipeline",
-							"dependsOn": [
-								{
-									"activity": "If Condition1",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								}
-							],
-							"userProperties": [],
-							"typeProperties": {
-								"pipeline": {
-									"referenceName": "PL_CargaDatos_TALLER_Patricio_Mendez",
-									"type": "PipelineReference"
-								},
-								"waitOnCompletion": true,
-								"parameters": {
-									"esquema": {
-										"value": "@item().esquema",
-										"type": "Expression"
-									},
-									"tabla": {
-										"value": "@item().tabla",
-										"type": "Expression"
-									},
-									"query": {
-										"value": "@{variables('query')}",
-										"type": "Expression"
-									},
-									"nombreArchivo": {
-										"value": "@variables('nombreArchivo')",
-										"type": "Expression"
-									}
-								}
-							}
-						},
-						{
 							"name": "If Condition1",
 							"type": "IfCondition",
 							"dependsOn": [
@@ -131,6 +93,44 @@
 												"type": "Expression"
 											}
 										}
+									},
+									{
+										"name": "Execute Carga_History",
+										"type": "ExecutePipeline",
+										"dependsOn": [
+											{
+												"activity": "Set nombreArchivo",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"userProperties": [],
+										"typeProperties": {
+											"pipeline": {
+												"referenceName": "PL_CargaDatos_TALLER_Patricio_Mendez",
+												"type": "PipelineReference"
+											},
+											"waitOnCompletion": true,
+											"parameters": {
+												"esquema": {
+													"value": "@item().esquema",
+													"type": "Expression"
+												},
+												"tabla": {
+													"value": "@item().tabla",
+													"type": "Expression"
+												},
+												"query": {
+													"value": "@{variables('query')}",
+													"type": "Expression"
+												},
+												"nombreArchivo": {
+													"value": "@variables('nombreArchivo')",
+													"type": "Expression"
+												}
+											}
+										}
 									}
 								],
 								"ifTrueActivities": [
@@ -144,6 +144,44 @@
 											"value": {
 												"value": "@concat(item().tabla,'.csv')",
 												"type": "Expression"
+											}
+										}
+									},
+									{
+										"name": "Execute Carga Stock",
+										"type": "ExecutePipeline",
+										"dependsOn": [
+											{
+												"activity": "Set nombreArchivo1",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"userProperties": [],
+										"typeProperties": {
+											"pipeline": {
+												"referenceName": "PL_CargaDatos_TALLER_Patricio_Mendez",
+												"type": "PipelineReference"
+											},
+											"waitOnCompletion": true,
+											"parameters": {
+												"esquema": {
+													"value": "@item().esquema",
+													"type": "Expression"
+												},
+												"tabla": {
+													"value": "@item().tabla",
+													"type": "Expression"
+												},
+												"query": {
+													"value": "@{variables('query')}",
+													"type": "Expression"
+												},
+												"nombreArchivo": {
+													"value": "@variables('nombreArchivo')",
+													"type": "Expression"
+												}
 											}
 										}
 									}
