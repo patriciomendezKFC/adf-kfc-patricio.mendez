@@ -45,6 +45,153 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/PL_EJEMPLI_FLUJOS')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Set variable1",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "bandera",
+							"value": {
+								"value": "@add(1,6)",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "ejecucion correcta",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Set variable1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "resultado",
+							"value": "ok"
+						}
+					},
+					{
+						"name": "ejecucion fallida",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Set variable1",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "resultado",
+							"value": "error"
+						}
+					},
+					{
+						"name": "Set variable2",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "ejecucion fallida",
+								"dependencyConditions": [
+									"Skipped"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "resultado",
+							"value": "res 2"
+						}
+					},
+					{
+						"name": "Set variable3",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Set variable2",
+								"dependencyConditions": [
+									"Skipped"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "resultado",
+							"value": "res 3"
+						}
+					},
+					{
+						"name": "Set variable4",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Set variable1",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "resultado",
+							"value": "res 4"
+						}
+					},
+					{
+						"name": "Set variable5",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "ejecucion fallida",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "Set variable4",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "resultado",
+							"value": "res 5"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"bandera": {
+						"type": "String"
+					},
+					"resultado": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "CLASE04"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/PL_EJEMPLO_CLASE01')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -117,6 +264,211 @@
 			"properties": {
 				"type": "SelfHosted",
 				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_USO_FORMULAS_PAR_IMPAR')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "determinar resultado",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "resultado",
+							"value": {
+								"value": "@if(equals(mod(pipeline().parameters.numero,2), 0),\nconcat(string(pipeline().parameters.numero),' Es Par' ),\nconcat(string(pipeline().parameters.numero),' Es Impar' ))\n",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"numero": {
+						"type": "int"
+					}
+				},
+				"variables": {
+					"resultado": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "CLASES ASINCRONICAS"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_USO_FORMILAS_MANEJO_FECHA')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "f actual",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "fechaActual",
+							"value": {
+								"value": "@utcnow()",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "f formato",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "f actual",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "fechaFormatoPersonalizado",
+							"value": {
+								"value": "@formatDateTime(variables('fechaActual'),'yyy-MM-dd')",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "f inicio mes",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "f formato",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "fechaInicioMes",
+							"value": {
+								"value": "@startOfMonth(variables('fechaActual'))",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "f suma perido",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "f inicio mes",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "fechaSumaPeriodo",
+							"value": {
+								"value": "@addToTime(variables('fechaInicioMes'),1,'Month')",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "f fin mes",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "f suma perido",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "fechaFinMes",
+							"value": {
+								"value": "@addToTime(variables('fechaSumaPeriodo'),-1,'Day')",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"fechaActual": {
+						"type": "String"
+					},
+					"fechaInicioMes": {
+						"type": "String"
+					},
+					"fechaFormatoPersonalizado": {
+						"type": "String"
+					},
+					"fechaSumaPeriodo": {
+						"type": "String"
+					},
+					"fechaFinMes": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "CLASES ASINCRONICAS"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_FECHA_POR_DEFECTO')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Set fecha corteVAR",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "fechaCorte",
+							"value": {
+								"value": "@coalesce(pipeline().parameters.fechaCorte,utcnow())",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"fechaCorte": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "CLASES ASINCRONICAS"
+				},
+				"annotations": []
 			},
 			"dependsOn": []
 		},
@@ -404,6 +756,52 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/PL_EJECUTAR_SP1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Stored procedure1",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[Saludar]",
+							"storedProcedureParameters": {
+								"nombre": {
+									"value": "Patricio",
+									"type": "String"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_azuresqldatabase",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "CLASES ASINCRONICAS"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_azuresqldatabase')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/PL_CARGA_INCREMENTAL')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -494,414 +892,6 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/TBL_LEER')]",
 				"[concat(variables('factoryId'), '/datasets/CSV_ESCRIBIR')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PL_CARGA_INCREMENTAL_1')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Copy data1",
-						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "Lookup1",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "SELECT [idFactura]\n      ,[idCliente]\n      ,[idEmpleado]\n      ,[fechaFactura]\n      ,[subtotal]\n      ,[impuestos]\n  FROM [dbo].[Factura]\n  WHERE YEAR([fechaFactura])=2017 AND MONTH([fechaFactura])=1",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".txt"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "TBL_LEER",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "CSV_ESCRIBIR",
-								"type": "DatasetReference",
-								"parameters": {
-									"directorio": {
-										"value": "@Concat('FACTURA/',activity('Lookup1').output.firstRow.Año,'/',activity('Lookup1').output.firstRow.Mes)",
-										"type": "Expression"
-									},
-									"archivo": "Factura.csv"
-								}
-							}
-						]
-					},
-					{
-						"name": "Lookup1",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "SELECT Distinct YEAR([fechaFactura]) Año, MONTH([fechaFactura]) Mes\n  FROM [dbo].[Factura]\n  WHERE YEAR([fechaFactura])=2017 AND MONTH([fechaFactura])=1",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "TBL_LEER",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"folder": {
-					"name": "CLASE03"
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/TBL_LEER')]",
-				"[concat(variables('factoryId'), '/datasets/CSV_ESCRIBIR')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PL_COPIA_DATOS_A_NUBE')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Copy data1",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "MySqlSource"
-							},
-							"sink": {
-								"type": "AzureSqlSink",
-								"writeBehavior": "insert",
-								"sqlWriterUseTableLock": false,
-								"tableOption": "autoCreate",
-								"disableMetricsCollection": false
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "TBL_CatalogoOnPremise",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "TBL_CatalgoCopiaNube",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"folder": {
-					"name": "CLASE03"
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/TBL_CatalogoOnPremise')]",
-				"[concat(variables('factoryId'), '/datasets/TBL_CatalgoCopiaNube')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PL_COPIA_DATOS_A_NUBE_CON_MAPEO')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Copy data con mapeo",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "MySqlSource",
-								"query": "SELECT *\nFROM registro_trabajo"
-							},
-							"sink": {
-								"type": "AzureSqlSink",
-								"preCopyScript": "TRUNCATE TABLE dbo.PatricioMendezCatalgo",
-								"writeBehavior": "insert",
-								"sqlWriterUseTableLock": false,
-								"disableMetricsCollection": false
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "TBL_CatalogoOnPremise",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "TBL_CatalgoCopiaNube",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"folder": {
-					"name": "CLASE03"
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/TBL_CatalogoOnPremise')]",
-				"[concat(variables('factoryId'), '/datasets/TBL_CatalgoCopiaNube')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PL_COPIA_EXCEL_LOCAL_A_NUBE')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Copy data1",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "ExcelSource",
-								"storeSettings": {
-									"type": "FileServerReadSettings",
-									"recursive": true,
-									"enablePartitionDiscovery": false
-								}
-							},
-							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".txt"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "XLSX_EjemploClase02",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "CSV_EjemploClase02Nube",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"folder": {
-					"name": "CLASE02"
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/XLSX_EjemploClase02')]",
-				"[concat(variables('factoryId'), '/datasets/CSV_EjemploClase02Nube')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PL_COPIA_EXCEL_LOCAL_A_PARQUET')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Copy data1",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "ExcelSource",
-								"storeSettings": {
-									"type": "FileServerReadSettings",
-									"recursive": true,
-									"enablePartitionDiscovery": false
-								}
-							},
-							"sink": {
-								"type": "ParquetSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "ParquetWriteSettings"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "XLSX_EjemploClase02",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "PARQUET_EjempoClase02",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"folder": {
-					"name": "CLASE02"
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/XLSX_EjemploClase02')]",
-				"[concat(variables('factoryId'), '/datasets/PARQUET_EjempoClase02')]"
 			]
 		}
 	]

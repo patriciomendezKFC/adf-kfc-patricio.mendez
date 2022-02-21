@@ -658,6 +658,153 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/PL_EJEMPLI_FLUJOS')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Set variable1",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "bandera",
+							"value": {
+								"value": "@add(1,6)",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "ejecucion correcta",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Set variable1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "resultado",
+							"value": "ok"
+						}
+					},
+					{
+						"name": "ejecucion fallida",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Set variable1",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "resultado",
+							"value": "error"
+						}
+					},
+					{
+						"name": "Set variable2",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "ejecucion fallida",
+								"dependencyConditions": [
+									"Skipped"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "resultado",
+							"value": "res 2"
+						}
+					},
+					{
+						"name": "Set variable3",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Set variable2",
+								"dependencyConditions": [
+									"Skipped"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "resultado",
+							"value": "res 3"
+						}
+					},
+					{
+						"name": "Set variable4",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Set variable1",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "resultado",
+							"value": "res 4"
+						}
+					},
+					{
+						"name": "Set variable5",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "ejecucion fallida",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "Set variable4",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "resultado",
+							"value": "res 5"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"bandera": {
+						"type": "String"
+					},
+					"resultado": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "CLASE04"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/PL_EJEMPLO_CLASE01')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -1007,16 +1154,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ir-conexion-local')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/SC_CalendarizadoCargaInicial')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
@@ -1060,6 +1197,352 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/PL_CARGA_RANGO_FECHAS')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ir-conexion-local')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_EJECUTAR_SP1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Stored procedure1",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[Saludar]",
+							"storedProcedureParameters": {
+								"nombre": {
+									"value": "Patricio",
+									"type": "String"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_azuresqldatabase",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "CLASES ASINCRONICAS"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_azuresqldatabase')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_EJECUTAR_SP2')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderStoredProcedureName": "[[dbo].[Saludar]",
+								"storedProcedureParameters": {
+									"nombre": {
+										"type": "String",
+										"value": "Patricio 2"
+									}
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "TBL_LEER",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "CSV_ESCRIBIR",
+								"type": "DatasetReference",
+								"parameters": {
+									"directorio": "RESULTADOS",
+									"archivo": "CSV_resultadoSP.csv"
+								}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "CLASES ASINCRONICAS"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/TBL_LEER')]",
+				"[concat(variables('factoryId'), '/datasets/CSV_ESCRIBIR')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_USO_FORMULAS_PAR_IMPAR')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "determinar resultado",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "resultado",
+							"value": {
+								"value": "@if(equals(mod(pipeline().parameters.numero,2), 0),\nconcat(string(pipeline().parameters.numero),' Es Par' ),\nconcat(string(pipeline().parameters.numero),' Es Impar' ))\n",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"numero": {
+						"type": "int"
+					}
+				},
+				"variables": {
+					"resultado": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "CLASES ASINCRONICAS"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_USO_FORMILAS_MANEJO_FECHA')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "f actual",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "fechaActual",
+							"value": {
+								"value": "@utcnow()",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "f formato",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "f actual",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "fechaFormatoPersonalizado",
+							"value": {
+								"value": "@formatDateTime(variables('fechaActual'),'yyy-MM-dd')",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "f inicio mes",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "f formato",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "fechaInicioMes",
+							"value": {
+								"value": "@startOfMonth(variables('fechaActual'))",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "f suma perido",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "f inicio mes",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "fechaSumaPeriodo",
+							"value": {
+								"value": "@addToTime(variables('fechaInicioMes'),1,'Month')",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "f fin mes",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "f suma perido",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "fechaFinMes",
+							"value": {
+								"value": "@addToTime(variables('fechaSumaPeriodo'),-1,'Day')",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"fechaActual": {
+						"type": "String"
+					},
+					"fechaInicioMes": {
+						"type": "String"
+					},
+					"fechaFormatoPersonalizado": {
+						"type": "String"
+					},
+					"fechaSumaPeriodo": {
+						"type": "String"
+					},
+					"fechaFinMes": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "CLASES ASINCRONICAS"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_FECHA_POR_DEFECTO')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Set fecha corteVAR",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "fechaCorte",
+							"value": {
+								"value": "@coalesce(pipeline().parameters.fechaCorte,utcnow())",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"fechaCorte": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "CLASES ASINCRONICAS"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
 		}
 	]
 }
