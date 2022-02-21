@@ -45,7 +45,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@array(activity('Consulta').output.count)",
+						"value": "@array(activity('Consulta').output.value)",
 						"type": "Expression"
 					},
 					"isSequential": false,
@@ -58,8 +58,42 @@
 							"typeProperties": {
 								"variableName": "query",
 								"value": {
-									"value": "@{item().queryOrg}",
+									"value": "@{replace(item().queryOrg,'{{fechaCorte}}',pipeline().parameters.fechaCorte)}",
 									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Execute Carga",
+							"type": "ExecutePipeline",
+							"dependsOn": [
+								{
+									"activity": "Set query",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "PL_CargaDatos_TALLER_Patricio_Mendez",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"esquema": {
+										"value": "@item().esquema",
+										"type": "Expression"
+									},
+									"tabla": {
+										"value": "@item().tabla",
+										"type": "Expression"
+									},
+									"query": {
+										"value": "@{variables('query')}",
+										"type": "Expression"
+									}
 								}
 							}
 						}
@@ -69,12 +103,6 @@
 		],
 		"parameters": {
 			"fechaCorte": {
-				"type": "string"
-			},
-			"fechaCorteDesde": {
-				"type": "string"
-			},
-			"idIngesta": {
 				"type": "string"
 			}
 		},

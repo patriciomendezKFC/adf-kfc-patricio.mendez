@@ -1,0 +1,88 @@
+{
+	"name": "PL_CargaDatos_TALLER_Patricio_Mendez",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "@{pipeline().parameters.query}",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "TBL_LEER",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "CSV_ESCRIBIR",
+						"type": "DatasetReference",
+						"parameters": {
+							"directorio": {
+								"value": "@concat('Taller/',pipeline().parameters.esquema,'/',pipeline().parameters.tabla,'/')",
+								"type": "Expression"
+							},
+							"archivo": {
+								"value": "@concat(pipeline().parameters.tabla,'.csv')",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"esquema": {
+				"type": "string"
+			},
+			"tabla": {
+				"type": "string"
+			},
+			"query": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "EVALUACION"
+		},
+		"annotations": []
+	}
+}
