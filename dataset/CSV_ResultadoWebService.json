@@ -1,6 +1,10 @@
 {
 	"name": "CSV_ResultadoWebService",
 	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Is_kfc_datalake",
+			"type": "LinkedServiceReference"
+		},
 		"folder": {
 			"name": "CLASES ASINCRONICAS"
 		},
