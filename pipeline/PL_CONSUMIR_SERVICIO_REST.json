@@ -1,0 +1,55 @@
+{
+	"name": "PL_CONSUMIR_SERVICIO_REST",
+	"properties": {
+		"activities": [
+			{
+				"name": "Web Service Hora Universal",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "http://worldclockapi.com/api/json/utc/now",
+					"method": "GET"
+				}
+			},
+			{
+				"name": "Set DayOfTheWeek",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Web Service Hora Universal",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "dayOfTheWeek",
+					"value": {
+						"value": "@activity('Web Service Hora Universal').output.dayOfTheWeek",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"dayOfTheWeek": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "CLASES ASINCRONICAS"
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-02-18T21:18:03Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
