@@ -18,7 +18,7 @@
 					"source": {
 						"type": "AzureSqlSource",
 						"sqlReaderQuery": {
-							"value": "SELECT\nidIngesta,\nEsquema,\nTabla,\nconsulta AS queryOrg\nFROM par.CatIngesta\n",
+							"value": "SELECT\nidIngesta,\nEsquema,\nTabla,\nconsulta AS queryOrg,\nTipoTabla\nFROM par.CatIngesta\n",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
@@ -93,6 +93,10 @@
 									"query": {
 										"value": "@{variables('query')}",
 										"type": "Expression"
+									},
+									"nombreArchivo": {
+										"value": "@variables('nombreArchivo')",
+										"type": "Expression"
 									}
 								}
 							}
@@ -108,7 +112,43 @@
 									]
 								}
 							],
-							"userProperties": []
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@equals(item().TipoTabla,'stock')",
+									"type": "Expression"
+								},
+								"ifFalseActivities": [
+									{
+										"name": "Set nombreArchivo",
+										"type": "SetVariable",
+										"dependsOn": [],
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "nombreArchivo",
+											"value": {
+												"value": "@concat(item().tabla,'_',pipeline().parameters.fechaCorte,'.csv')",
+												"type": "Expression"
+											}
+										}
+									}
+								],
+								"ifTrueActivities": [
+									{
+										"name": "Set nombreArchivo1",
+										"type": "SetVariable",
+										"dependsOn": [],
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "nombreArchivo",
+											"value": {
+												"value": "@concat(item().tabla,'.csv')",
+												"type": "Expression"
+											}
+										}
+									}
+								]
+							}
 						}
 					]
 				}
@@ -121,6 +161,9 @@
 		},
 		"variables": {
 			"query": {
+				"type": "String"
+			},
+			"nombreArchivo": {
 				"type": "String"
 			}
 		},
