@@ -1,0 +1,34 @@
+{
+	"name": "PL_USO_FORMULAS_PAR_IMPAR",
+	"properties": {
+		"activities": [
+			{
+				"name": "determinar resultado",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "resultado",
+					"value": {
+						"value": "@if(equals(mod(pipeline().parameters.numero,2), 0),\nconcat(string(pipeline().parameters.numero),' Es Par' ),\nconcat(string(pipeline().parameters.numero),' Es Impar' ))\n",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"numero": {
+				"type": "int"
+			}
+		},
+		"variables": {
+			"resultado": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "CLASES ASINCRONICAS"
+		},
+		"annotations": []
+	}
+}
