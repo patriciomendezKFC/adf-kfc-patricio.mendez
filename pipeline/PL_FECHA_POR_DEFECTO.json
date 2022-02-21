@@ -1,6 +1,14 @@
 {
 	"name": "PL_FECHA_POR_DEFECTO",
 	"properties": {
+		"activities": [
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": []
+			}
+		],
 		"folder": {
 			"name": "CLASES ASINCRONICAS"
 		},
