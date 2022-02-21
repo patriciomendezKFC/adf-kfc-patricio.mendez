@@ -1,0 +1,67 @@
+{
+	"name": "PL_USO_WAIT",
+	"properties": {
+		"activities": [
+			{
+				"name": "Esperar",
+				"type": "Wait",
+				"dependsOn": [
+					{
+						"activity": "Set INICIO",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 20
+				}
+			},
+			{
+				"name": "Set INICIO",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "mensaje",
+					"value": {
+						"value": "@utcnow()",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set FIN",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Esperar",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "mensaje",
+					"value": {
+						"value": "@utcnow()",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"mensaje": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "CLASES ASINCRONICAS"
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-02-18T21:18:00Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
