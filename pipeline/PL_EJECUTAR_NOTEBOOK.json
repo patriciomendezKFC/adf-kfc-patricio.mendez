@@ -1,0 +1,28 @@
+{
+	"name": "PL_EJECUTAR_NOTEBOOK",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Test",
+					"value": "ValorPrueba"
+				}
+			}
+		],
+		"variables": {
+			"Test": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "CLASES ASINCRONICAS"
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-02-18T21:18:00Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
