@@ -1,0 +1,121 @@
+{
+	"name": "PL_USO_FORMILAS_MANEJO_FECHA",
+	"properties": {
+		"activities": [
+			{
+				"name": "f actual",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "fechaActual",
+					"value": {
+						"value": "@utcnow()",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "f formato",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "f actual",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "fechaFormatoPersonalizado",
+					"value": {
+						"value": "@formatDateTime(variables('fechaActual'),'yyy-MM-dd')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "f inicio mes",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "f formato",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "fechaInicioMes",
+					"value": {
+						"value": "@startOfMonth(variables('fechaActual'))",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "f suma perido",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "f inicio mes",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "fechaSumaPeriodo",
+					"value": {
+						"value": "@addToTime(variables('fechaInicioMes'),1,'Month')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "f fin mes",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "f suma perido",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "fechaFinMes",
+					"value": {
+						"value": "@addToTime(variables('fechaSumaPeriodo'),-1,'Day')",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"fechaActual": {
+				"type": "String"
+			},
+			"fechaInicioMes": {
+				"type": "String"
+			},
+			"fechaFormatoPersonalizado": {
+				"type": "String"
+			},
+			"fechaSumaPeriodo": {
+				"type": "String"
+			},
+			"fechaFinMes": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "CLASES ASINCRONICAS"
+		},
+		"annotations": []
+	}
+}
