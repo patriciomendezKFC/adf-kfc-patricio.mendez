@@ -1,0 +1,12 @@
+{
+	"name": "REST_Dataset",
+	"properties": {
+		"folder": {
+			"name": "CLASES ASINCRONICAS"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
