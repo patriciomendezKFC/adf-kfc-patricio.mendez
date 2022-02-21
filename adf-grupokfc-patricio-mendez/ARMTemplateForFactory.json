@@ -50,6 +50,10 @@
 		"RestService1_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "http://worldclockapi.com/api/json/utc/now"
+		},
+		"SC_CalendarizadoTallerFinal_Patricio_Mendez_properties_PL_TALLER_Patricio_Mendez_parameters_fechaCorte": {
+			"type": "string",
+			"defaultValue": "2020-01-11"
 		}
 	},
 	"variables": {
@@ -2493,6 +2497,44 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SC_CalendarizadoTallerFinal_Patricio_Mendez')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Taller final",
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "PL_TALLER_Patricio_Mendez",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"fechaCorte": "[parameters('SC_CalendarizadoTallerFinal_Patricio_Mendez_properties_PL_TALLER_Patricio_Mendez_parameters_fechaCorte')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2022-02-21T22:58:00",
+						"timeZone": "SA Pacific Standard Time",
+						"schedule": {
+							"hours": [
+								23
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/PL_TALLER_Patricio_Mendez')]"
+			]
 		}
 	]
 }

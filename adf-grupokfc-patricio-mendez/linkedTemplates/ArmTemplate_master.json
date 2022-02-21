@@ -51,6 +51,10 @@
 			"type": "string",
 			"defaultValue": "http://worldclockapi.com/api/json/utc/now"
 		},
+		"SC_CalendarizadoTallerFinal_Patricio_Mendez_properties_PL_TALLER_Patricio_Mendez_parameters_fechaCorte": {
+			"type": "string",
+			"defaultValue": "2020-01-11"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI de la cuenta de almacenamiento que contiene las plantillas de ARM vinculadas."
@@ -133,6 +137,29 @@
 			},
 			"dependsOn": [
 				"[resourceId('Microsoft.Resources/deployments', 'adf-grupokfc-patricio-mendez_ArmTemplate_0')]"
+			]
+		},
+		{
+			"name": "adf-grupokfc-patricio-mendez_ArmTemplate_2",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"SC_CalendarizadoTallerFinal_Patricio_Mendez_properties_PL_TALLER_Patricio_Mendez_parameters_fechaCorte": {
+						"value": "[parameters('SC_CalendarizadoTallerFinal_Patricio_Mendez_properties_PL_TALLER_Patricio_Mendez_parameters_fechaCorte')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'adf-grupokfc-patricio-mendez_ArmTemplate_1')]"
 			]
 		}
 	]

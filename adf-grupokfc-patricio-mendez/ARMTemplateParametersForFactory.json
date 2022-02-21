@@ -37,6 +37,9 @@
 		},
 		"RestService1_properties_typeProperties_url": {
 			"value": "http://worldclockapi.com/api/json/utc/now"
+		},
+		"SC_CalendarizadoTallerFinal_Patricio_Mendez_properties_PL_TALLER_Patricio_Mendez_parameters_fechaCorte": {
+			"value": "2020-01-11"
 		}
 	}
 }
