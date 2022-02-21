@@ -1,0 +1,91 @@
+{
+	"name": "PL_TALLER_Patricio_Mendez",
+	"properties": {
+		"activities": [
+			{
+				"name": "Consulta",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "SELECT\nidIngesta,\nEsquema,\nTabla,\nconsulta AS query\nFROM par.CatIngesta\n",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "TBL_LEER",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "Loop",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Consulta",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@array(activity('Consulta').output.count)",
+						"type": "Expression"
+					},
+					"isSequential": false,
+					"activities": [
+						{
+							"name": "Set query",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "query",
+								"value": {
+									"value": "@{item().query}",
+									"type": "Expression"
+								}
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"fechaCorte": {
+				"type": "string"
+			},
+			"fechaCorteDesde": {
+				"type": "string"
+			},
+			"idIngesta": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"query": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "EVALUACION"
+		},
+		"annotations": []
+	}
+}
