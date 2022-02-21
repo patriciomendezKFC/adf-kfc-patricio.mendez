@@ -3,14 +3,14 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Set fecha corteVAR",
+				"name": "Set Fecha Corte Var",
 				"type": "SetVariable",
 				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "fechaCorte",
+					"variableName": "fechaCorteVar",
 					"value": {
-						"value": "@coalesce(pipeline().parameters.fechaCorte,utcnow())",
+						"value": "@coalesce(pipeline().parameters.fechaCorte,formatDateTime(addToTime(utcnow(),-5,'Hour'),'yyyy-MM-dd'))",
 						"type": "Expression"
 					}
 				}
@@ -21,9 +21,16 @@
 				"type": "string"
 			}
 		},
+		"variables": {
+			"fechaCorteVar": {
+				"type": "String"
+			}
+		},
 		"folder": {
 			"name": "CLASES ASINCRONICAS"
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2022-02-18T21:18:00Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }
