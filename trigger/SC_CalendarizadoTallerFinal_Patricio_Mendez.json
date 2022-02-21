@@ -1,0 +1,33 @@
+{
+	"name": "SC_CalendarizadoTallerFinal_Patricio_Mendez",
+	"properties": {
+		"description": "Taller final",
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "PL_TALLER_Patricio_Mendez",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"fechaCorte": "2020-01-11"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2022-02-21T22:58:00",
+				"timeZone": "SA Pacific Standard Time",
+				"schedule": {
+					"hours": [
+						23
+					]
+				}
+			}
+		}
+	}
+}
